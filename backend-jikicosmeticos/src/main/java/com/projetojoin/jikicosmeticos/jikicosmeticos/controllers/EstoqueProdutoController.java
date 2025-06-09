@@ -1,5 +1,5 @@
 package com.projetojoin.jikicosmeticos.jikicosmeticos.controllers;
-import com.projetojoin.jikicosmeticos.jikicosmeticos.models.Product;
+import com.projetojoin.jikicosmeticos.jikicosmeticos.entity.Product;
 import com.projetojoin.jikicosmeticos.jikicosmeticos.repository.EstoqueProdutoRepository;
 
 import org.springframework.web.bind.annotation.GetMapping;

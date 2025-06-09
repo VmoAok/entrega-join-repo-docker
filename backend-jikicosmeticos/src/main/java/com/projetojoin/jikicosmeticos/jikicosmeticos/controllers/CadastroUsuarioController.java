@@ -3,6 +3,7 @@ package com.projetojoin.jikicosmeticos.jikicosmeticos.controllers;
 import com.projetojoin.jikicosmeticos.jikicosmeticos.dto.CadastroDTO;
 import com.projetojoin.jikicosmeticos.jikicosmeticos.entity.Usuario;
 import com.projetojoin.jikicosmeticos.jikicosmeticos.repository.UsuarioRepository;
+import com.projetojoin.jikicosmeticos.jikicosmeticos.services.EmailServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
@@ -19,6 +20,9 @@ public class CadastroUsuarioController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private EmailServices emailServices;
 
     @PostMapping
     public ResponseEntity<?> cadastrarUsuario(@RequestBody Usuario usuario2) {
@@ -38,7 +42,10 @@ public class CadastroUsuarioController {
         usuario.setTelefone(usuario2.getTelefone());
         usuario.setHash(gerarHashCpf(usuario2.getCpf()));
         usuarioRepository.save(usuario);
-        return ResponseEntity.ok("Usuário cadastrado!");
+
+        enviarEmailConfirmacao(usuario);
+
+        return ResponseEntity.ok("Usuário cadastrado! Um e-mail de confirmação foi enviado.");
     }
 
     @PutMapping("/me")
@@ -51,17 +58,10 @@ public class CadastroUsuarioController {
         usuario.setEmail(dto.getEmail());
         usuario.setTelefone(dto.getTelefone());
         usuarioRepository.save(usuario);
-        return ResponseEntity.ok("Dados atualizados com sucesso!");
-    }
 
-    @DeleteMapping("/me")
-    public ResponseEntity<?> solicitarExclusao(Authentication authentication) {
-        String email = authentication.getName();
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
-        if (usuarioOpt.isEmpty()) return ResponseEntity.notFound().build();
-        Usuario usuario = usuarioOpt.get();
-        enviarSolicitacaoExclusaoAdmin(usuario);
-        return ResponseEntity.ok("Solicitação de exclusão enviada ao administrador.");
+        enviarEmailAtualizacao(usuario);
+
+        return ResponseEntity.ok("Dados atualizados com sucesso! Um e-mail de notificação foi enviado.");
     }
 
     private String gerarHashCpf(String cpf) {
@@ -78,9 +78,19 @@ public class CadastroUsuarioController {
         }
     }
 
-    private void enviarSolicitacaoExclusaoAdmin(Usuario usuario) {
+    private void enviarEmailConfirmacao(Usuario usuario) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setSubject("Solicitação de exclusão de usuário (LGPD)");
-        message.setText("Usuário solicitou exclusão de seus dados:\nEmail: " + usuario.getEmail() + "\nCPF: " + usuario.getCpf());
+        message.setTo(usuario.getEmail());
+        message.setSubject("Confirmação de cadastro");
+        message.setText("Olá " + usuario.getNome() + ",\n\nSeu cadastro foi realizado com sucesso!\n\nSe você não realizou este cadastro, ignore este e-mail.");
+        emailServices.sendEmail(message);
+    }
+
+    private void enviarEmailAtualizacao(Usuario usuario) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(usuario.getEmail());
+        message.setSubject("Atualização de dados cadastrais");
+        message.setText("Olá " + usuario.getNome() + ",\n\nSeus dados cadastrais foram atualizados com sucesso.\n\nSe você não realizou esta alteração, entre em contato conosco.");
+        emailServices.sendEmail(message);
     }
 }

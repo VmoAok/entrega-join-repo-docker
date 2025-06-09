@@ -76,7 +76,7 @@ public class PedidoController {
     }
 
     @PutMapping("/admin/pedidos/{id}/status")
-    @PreAuthorize("authentication.authorities.?[authority.startsWith('UFUNC')].size() > 0")
+    @PreAuthorize("hasAuthority('FUNC')")
     public ResponseEntity<?> modificarStatusPedido(@PathVariable String idPedido, @RequestParam String status) {
         List<Pedido> pedidoOpt = pedidoRepository.findByIdPedido(idPedido);
         if (pedidoOpt.isEmpty()) {
@@ -123,26 +123,21 @@ public class PedidoController {
         return ResponseEntity.ok("Pedido cancelado com sucesso.");
     }
 
-    @GetMapping("/me/pedidos")
-    @PreAuthorize("authentication.authorities.?[authority.startsWith('UCLI')].size() > 0")
-    public ResponseEntity<List<Pedido>> listarMeusPedidos(Authentication authentication) {
+@GetMapping("/me/pedidos")
+@PreAuthorize("hasAuthority('CLI')")
+public ResponseEntity<List<Pedido>> listarMeusPedidos(Authentication authentication) {
     String email = authentication.getName();
     Usuario usuarioLogado = usuarioRepository.findByEmail(email).orElse(null);
     if (usuarioLogado == null) {
         return ResponseEntity.status(401).build();
     }
 
-    boolean autorizado = authentication.getAuthorities().stream()
-        .anyMatch(a -> a.getAuthority().equals(usuarioLogado.getIdUser()));
-    if (!autorizado) {
-        return ResponseEntity.status(403).body(null);
-    }
     List<Pedido> pedidos = pedidoRepository.findByUsuario(usuarioLogado);
     return ResponseEntity.ok(pedidos);
 }
 
     @GetMapping("/admin/pedidos")
-    @PreAuthorize("authentication.authorities.?[authority.startsWith('UFUNC')].size() > 0")
+    @PreAuthorize("hasAuthority('FUNC')")
     public ResponseEntity<List<Pedido>> listarTodosPedidos() {
         List<Pedido> pedidos = new java.util.ArrayList<>();
         Iterable<Pedido> allPedidos = pedidoRepository.findAll();

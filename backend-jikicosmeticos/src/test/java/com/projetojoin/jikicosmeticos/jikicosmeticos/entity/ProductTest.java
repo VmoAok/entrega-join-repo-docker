@@ -1,6 +1,9 @@
-package com.projetojoin.jikicosmeticos.jikicosmeticos.models;
+package com.projetojoin.jikicosmeticos.jikicosmeticos.entity;
 
 import org.junit.jupiter.api.Test;
+
+import com.projetojoin.jikicosmeticos.jikicosmeticos.entity.Product;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProductTest {

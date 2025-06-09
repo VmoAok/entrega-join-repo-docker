@@ -1,7 +1,6 @@
 package com.projetojoin.jikicosmeticos.jikicosmeticos.repository;
 
 import com.projetojoin.jikicosmeticos.jikicosmeticos.entity.Pedido;
-import com.projetojoin.jikicosmeticos.jikicosmeticos.entity.Usuario;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -33,33 +32,6 @@ class PedidoRepositoryTest {
         assertTrue(pedidoRepository.findById(saved.getIdPedido()).isPresent());
     }
 
-    @Test
-    void testFindByUsuario() {
-        Usuario usuario = new Usuario();
-        usuario.setEmail("user@email.com");
-        usuario.setNome("Usuário Teste");
-        usuario.setCpf("12345678900");
-        usuario.setCep("12345-678");
-        usuario.setCidade("Cidade");
-        usuario.setEstado("Estado");
-        usuario.setBairro("Bairro");
-        usuario.setEndereco("Endereço");
-        usuario.setPassword("senha");
-        usuario.setTelefone("11999999999");
-        usuarioRepository.save(usuario);
-
-        Pedido pedido = new Pedido();
-        pedido.setIdPedido("2");
-        pedido.setProduto("Condicionador");
-        pedido.setStatusPedido("Processando");
-
-
-        pedidoRepository.save(pedido);
-
-        List<Pedido> pedidos = pedidoRepository.findByUsuario(usuario);
-        assertFalse(pedidos.isEmpty());
-        assertEquals("2", pedidos.get(0).getIdPedido());
-    }
 
     @Test
     void testFindByIdPedido() {

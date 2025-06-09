@@ -1,4 +1,4 @@
-package com.projetojoin.jikicosmeticos.jikicosmeticos.models;
+package com.projetojoin.jikicosmeticos.jikicosmeticos.entity;
 
 import jakarta.persistence.*;
 
@@ -33,4 +33,5 @@ public class Product {
 
     public String getEstoque() { return estoque; }
     public void setEstoque(String estoque) { this.estoque = estoque; }
+
 }

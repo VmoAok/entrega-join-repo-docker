@@ -16,20 +16,27 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class TokenConfig {
+    private static final Logger logger = LoggerFactory.getLogger(TokenConfig.class);
+
     @Value("${api.security.token.secret}")
     private String secret;
 
     public String generateToken(Usuario usuario){
         try{
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            return JWT.create()
+            String token = JWT.create()
                     .withIssuer("internojiki")
                     .withSubject(String.valueOf(usuario.getIdUser()))
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
+
+            logger.info("Token JWT Gerado: {}", token);
+            return token;
 
         }catch (JWTCreationException exception){
             throw new RuntimeException("Erro ao gerar token", exception);

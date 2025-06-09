@@ -1,0 +1,62 @@
+.loginContainer {
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 24px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px #e5d4ee55;
+}
+
+.tabBar {
+  display: flex;
+  margin-bottom: 24px;
+}
+
+.tabBtn {
+  flex: 1;
+  padding: 12px;
+  background: #eee;
+  color: #333;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background 0.2s, color 0.2s;
+}
+
+.tabBtn:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.tabBtn:last-child {
+  border-radius: 0 8px 8px 0;
+}
+
+.tabBtn.active {
+  background: #ce9ee0;
+  color: #fff;
+}
+
+.formInput {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.formBtn {
+  width: 100%;
+  padding: 12px;
+  background: #b0d8bc;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.formBtn:hover {
+  background: #c798c9;
+}

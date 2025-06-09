@@ -22,7 +22,7 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - db
+      - postgis_35_sample
       - kafka 
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgis_35_sample

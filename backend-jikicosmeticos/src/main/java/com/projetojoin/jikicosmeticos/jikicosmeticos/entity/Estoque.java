@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 public class Estoque {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-    private String idCosmetico;
+    private Long idCosmetico;
 
     private String produto;
 
@@ -21,10 +21,10 @@ public class Estoque {
 
     private String quantidade;
 
-    public String getIdCosmetico() {
+    public Long getIdCosmetico() {
         return idCosmetico;
     }
-    public void setIdCosmetico(String idCosmetico) {
+    public void setIdCosmetico(Long idCosmetico) {
         this.idCosmetico = idCosmetico;
     }
     public String getProduto() {

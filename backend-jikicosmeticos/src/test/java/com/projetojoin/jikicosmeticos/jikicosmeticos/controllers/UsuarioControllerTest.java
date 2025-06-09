@@ -35,13 +35,12 @@ public class UsuarioControllerTest {
         loginRequest.setEmail("test@example.com");
         loginRequest.setPassword("password");
 
-
         Usuario existingUser = new Usuario();
         existingUser.setEmail("test@example.com");
         existingUser.setPassword("password");
 
         when(usuarioRepository.findByEmail("test@example.com")).thenReturn(Optional.of(existingUser));
-
+        
         // Act
         ResponseEntity<?> response = usuarioController.login(loginRequest);
 

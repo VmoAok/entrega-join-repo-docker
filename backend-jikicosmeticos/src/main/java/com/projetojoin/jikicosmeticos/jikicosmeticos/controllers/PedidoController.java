@@ -44,7 +44,7 @@ public class PedidoController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> deletePedido(@PathVariable String idPedido, Authentication authentication) {
+    public ResponseEntity<?> deletePedido(@PathVariable Long idPedido, Authentication authentication) {
         List<Pedido> pedidoOpt = pedidoRepository.findByIdPedido(idPedido);
         if (pedidoOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -77,13 +77,13 @@ public class PedidoController {
 
     @PutMapping("/admin/pedidos/{id}/status")
     @PreAuthorize("hasAuthority('FUNC')")
-    public ResponseEntity<?> modificarStatusPedido(@PathVariable String idPedido, @RequestParam String status) {
+    public ResponseEntity<?> modificarStatusPedido(@PathVariable Long idPedido, @RequestParam String status) {
         List<Pedido> pedidoOpt = pedidoRepository.findByIdPedido(idPedido);
         if (pedidoOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         Pedido pedido = pedidoOpt.get(0);
-        pedido.setStatus(status);
+        pedido.setStatusPedido(status);
         pedidoRepository.save(pedido);
         return ResponseEntity.ok("Status do pedido atualizado.");
     }
@@ -109,7 +109,7 @@ public class PedidoController {
 
     @DeleteMapping("/me/pedidos/{id}")
     @PreAuthorize("hasAuthority('CLI')")
-    public ResponseEntity<?> cancelarPedido(@PathVariable String idPedido, Authentication authentication) {
+    public ResponseEntity<?> cancelarPedido(@PathVariable Long idPedido, Authentication authentication) {
         String email = authentication.getName();
         List<Pedido> pedidoOpt = pedidoRepository.findByIdPedido(idPedido);
         if (pedidoOpt.isEmpty()) {

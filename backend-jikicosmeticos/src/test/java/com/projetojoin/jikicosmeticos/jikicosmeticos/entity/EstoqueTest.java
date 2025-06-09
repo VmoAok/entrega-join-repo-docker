@@ -8,8 +8,8 @@ class EstoqueTest {
     @Test
     void testSetAndGetIdCosmetico() {
         Estoque estoque = new Estoque();
-        estoque.setIdCosmetico("1");
-        assertEquals("1", estoque.getIdCosmetico());
+        estoque.setIdCosmetico (1L);
+        assertEquals(1L, estoque.getIdCosmetico());
     }
 
     @Test

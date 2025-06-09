@@ -1,22 +1,28 @@
 package com.projetojoin.jikicosmeticos.jikicosmeticos.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDate;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "tb_jiki_pedidos")
 public class Pedido {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_pedido")
-    private String idPedido;
+    private Long idPedido;
 
     @ManyToOne
     @JoinColumn(name = "id_user")
     private Usuario usuario;
 
     @Column(name = "id_cosmetico")
-    private String idCosmetico;
+    private Long idCosmetico;
 
     @Column(name = "produto")
     private String produto;
@@ -39,106 +45,11 @@ public class Pedido {
     @Column(name = "data_previsao_entrega")
     private LocalDate dataPrevisaoEntrega;
 
-    // Getters e Setters
-
-    public String getIdPedido() {
-        return idPedido;
-    }
-
-    public void setIdPedido(String idPedido) {
-        this.idPedido = idPedido;
-    }
-
-    public String getIdCosmetico() {
-        return idCosmetico;
-    }
-
-    public void setIdCosmetico(String idCosmetico) {
-        this.idCosmetico = idCosmetico;
-    }
-
-    public String getProduto() {
-        return produto;
-    }
-
-    public void setProduto(String produto) {
-        this.produto = produto;
-    }
-
-    public String getTipoProduto() {
-        return tipoProduto;
-    }
-
-    public void setTipoProduto(String tipoProduto) {
-        this.tipoProduto = tipoProduto;
-    }
-
-    public String getCategoriaProduto() {
-        return categoriaProduto;
-    }
-
-    public void setCategoriaProduto(String categoriaProduto) {
-        this.categoriaProduto = categoriaProduto;
-    }
-
-    public Integer getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    public String getStatusPedido() {
-        return statusPedido;
-    }
-
-    public void setStatusPedido(String statusPedido) {
-        this.statusPedido = statusPedido;
-    }
-
-    public LocalDate getDataRealizacaoPedido() {
-        return dataRealizacaoPedido;
-    }
-
-    public void setDataRealizacaoPedido(LocalDate dataRealizacaoPedido) {
-        this.dataRealizacaoPedido = dataRealizacaoPedido;
-    }
-
-    public LocalDate getDataPrevisaoEntrega() {
-        return dataPrevisaoEntrega;
-    }
-
-    public void setDataPrevisaoEntrega(LocalDate dataPrevisaoEntrega) {
-        this.dataPrevisaoEntrega = dataPrevisaoEntrega;
-    }
-
-    @Override
-    public String toString() {
-        return "Pedido{" +
-                "idPedido='" + idPedido + '\'' +
-                ", idCosmetico='" + idCosmetico + '\'' +
-                ", produto='" + produto + '\'' +
-                ", tipoProduto='" + tipoProduto + '\'' +
-                ", categoriaProduto='" + categoriaProduto + '\'' +
-                ", quantidade=" + quantidade +
-                ", statusPedido='" + statusPedido + '\'' +
-                ", dataRealizacaoPedido=" + dataRealizacaoPedido +
-                ", dataPrevisaoEntrega=" + dataPrevisaoEntrega +
-                '}';
+    public void setIdUser(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public Usuario getIdUser() {
-        return getIdUser();
-
-    }
-    public void setIdUser(Usuario idUser) {
-        this.setIdUser(idUser);
-    }
-
-    public void setStatus(String status) {
-        this.statusPedido = status;
-        
+        return this.usuario;
     }
 }
-

@@ -6,11 +6,11 @@ import com.projetojoin.jikicosmeticos.jikicosmeticos.config.TestMailConfig;
 import org.springframework.context.annotation.Import;
 
 @SpringBootTest
-@Import(TestMailConfig.class)
-class JikicosmeticosApplicationTests {
+
+public class JikicosmeticosApplicationTest {
 
     @Test
     void contextLoads() {
+        // This test will pass if the application context loads successfully
     }
-
 }

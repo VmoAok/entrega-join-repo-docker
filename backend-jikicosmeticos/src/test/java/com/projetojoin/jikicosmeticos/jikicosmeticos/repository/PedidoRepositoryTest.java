@@ -1,6 +1,7 @@
 package com.projetojoin.jikicosmeticos.jikicosmeticos.repository;
 
 import com.projetojoin.jikicosmeticos.jikicosmeticos.entity.Pedido;
+import com.projetojoin.jikicosmeticos.jikicosmeticos.entity.Usuario;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -22,27 +23,25 @@ class PedidoRepositoryTest {
     @Test
     void testSaveAndFindById() {
         Pedido pedido = new Pedido();
-        pedido.setIdPedido("1");
         pedido.setProduto("Shampoo");
         pedido.setStatusPedido("Novo");
         pedido.setDataRealizacaoPedido(LocalDate.now());
         pedido.setDataPrevisaoEntrega(LocalDate.now().plusDays(5));
 
         Pedido saved = pedidoRepository.save(pedido);
-        assertTrue(pedidoRepository.findById(saved.getIdPedido()).isPresent());
+        assertNotNull(saved.getIdPedido());
+        assertFalse(pedidoRepository.findByIdPedido(saved.getIdPedido()).isEmpty());
     }
-
 
     @Test
     void testFindByIdPedido() {
         Pedido pedido = new Pedido();
-        pedido.setIdPedido("3");
         pedido.setProduto("Máscara");
         pedido.setStatusPedido("Entregue");
-        pedidoRepository.save(pedido);
+        Pedido savedPedido = pedidoRepository.save(pedido);
 
-        List<Pedido> pedidos = pedidoRepository.findByIdPedido("3");
+        List<Pedido> pedidos = pedidoRepository.findByIdPedido(savedPedido.getIdPedido());
         assertFalse(pedidos.isEmpty());
-        assertEquals("3", pedidos.get(0).getIdPedido());
+        assertEquals(savedPedido.getIdPedido(), pedidos.get(0).getIdPedido());
     }
 }

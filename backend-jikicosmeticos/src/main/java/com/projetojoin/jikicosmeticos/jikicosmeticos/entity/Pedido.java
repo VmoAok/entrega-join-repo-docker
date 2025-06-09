@@ -11,6 +11,10 @@ public class Pedido {
     @Column(name = "id_pedido")
     private String idPedido;
 
+    @ManyToOne
+    @JoinColumn(name = "id_user")
+    private Usuario usuario;
+
     @Column(name = "id_cosmetico")
     private String idCosmetico;
 

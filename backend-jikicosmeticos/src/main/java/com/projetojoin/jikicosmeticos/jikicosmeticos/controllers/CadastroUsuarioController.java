@@ -22,11 +22,11 @@ public class CadastroUsuarioController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private JavaMailSender mailSender;
+//    @Autowired
+//    private JavaMailSender mailSender;
 
-    @Value("${admin.email}")
-    private String adminEmail;
+//    @Value("${admin.email}")
+//    private String adminEmail;
 
     @PostMapping
     public ResponseEntity<?> cadastrarUsuario(@RequestBody Usuario usuario2) {
@@ -88,10 +88,10 @@ public class CadastroUsuarioController {
 
     private void enviarSolicitacaoExclusaoAdmin(Usuario usuario) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(adminEmail);
+//        message.setTo(adminEmail);
         message.setSubject("Solicitação de exclusão de usuário (LGPD)");
         message.setText("Usuário solicitou exclusão de seus dados:\nEmail: " + usuario.getEmail() + "\nCPF: " + usuario.getCpf());
-        mailSender.send(message);
+        //mailSender.send(message);
     }
 
    

@@ -28,7 +28,6 @@ public class CadastroUsuarioController {
     @Value("${admin.email}")
     private String adminEmail;
 
-    // Criar novo usuário (cliente)
     @PostMapping
     public ResponseEntity<?> cadastrarUsuario(@RequestBody Usuario usuario2) {
         if (usuarioRepository.existsByEmail(usuario2.getEmail()) || usuarioRepository.existsByCpf(usuario2.getCpf())) {
@@ -45,12 +44,11 @@ public class CadastroUsuarioController {
         usuario.setEndereco(usuario2.getEndereco());
         usuario.setPassword(usuario2.getPassword());
         usuario.setTelefone(usuario2.getTelefone());
-        usuario.setHash(gerarHashCpf(usuario2.getCpf())); // Gera hash único do CPF
+        usuario.setHash(gerarHashCpf(usuario2.getCpf()));
         usuarioRepository.save(usuario);
         return ResponseEntity.ok("Usuário cadastrado!");
     }
 
-    // Atualizar apenas email e celular do usuário autenticado
     @PutMapping("/me")
     public ResponseEntity<?> atualizarMe(@RequestBody CadastroDTO dto, Authentication authentication) {
         String email = authentication.getName();
@@ -58,14 +56,12 @@ public class CadastroUsuarioController {
         if (usuarioOpt.isEmpty()) return ResponseEntity.notFound().build();
         Usuario usuario = usuarioOpt.get();
 
-        // Atualiza apenas email e telefone
         usuario.setEmail(dto.getEmail());
         usuario.setTelefone(dto.getTelefone());
         usuarioRepository.save(usuario);
         return ResponseEntity.ok("Dados atualizados com sucesso!");
     }
 
-    // Solicitar exclusão de registro (envia e-mail para admin, não remove direto)
     @DeleteMapping("/me")
     public ResponseEntity<?> solicitarExclusao(Authentication authentication) {
         String email = authentication.getName();
@@ -76,7 +72,6 @@ public class CadastroUsuarioController {
         return ResponseEntity.ok("Solicitação de exclusão enviada ao administrador.");
     }
 
-    // Utilitário para gerar hash único do CPF
     private String gerarHashCpf(String cpf) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -91,7 +86,6 @@ public class CadastroUsuarioController {
         }
     }
 
-    // Utilitário para enviar e-mail ao admin solicitando exclusão
     private void enviarSolicitacaoExclusaoAdmin(Usuario usuario) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(adminEmail);

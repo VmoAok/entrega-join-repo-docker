@@ -24,7 +24,6 @@ public class UsuarioController {
     @Autowired
     private PedidoRepository pedidoRepository;
 
-    // Endpoint para login (valida email, senha e data de modificação)
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Usuario loginRequest) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(loginRequest.getEmail());
@@ -32,14 +31,10 @@ public class UsuarioController {
             return ResponseEntity.status(401).body("Usuário não encontrado.");
         }
         Usuario usuario = usuarioOpt.get();
-        // Verifica senha e data de modificação (exemplo: dataModificacao é LocalDateTime)
         if (!usuario.getPassword().equals(loginRequest.getPassword())) {
             return ResponseEntity.status(401).body("Senha incorreta.");
         }
-        if (loginRequest.getDataModificacao() != null && !loginRequest.getDataModificacao().equals(usuario.getDataModificacao())) {
-            return ResponseEntity.status(401).body("Data de modificação inválida.");
-        }
-        // Aqui você geraria e retornaria o token JWT
+
         return ResponseEntity.ok("Login realizado com sucesso.");
     }
 }

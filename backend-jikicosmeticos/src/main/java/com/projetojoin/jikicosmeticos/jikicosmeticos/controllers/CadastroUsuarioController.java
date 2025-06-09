@@ -4,10 +4,8 @@ import com.projetojoin.jikicosmeticos.jikicosmeticos.dto.CadastroDTO;
 import com.projetojoin.jikicosmeticos.jikicosmeticos.entity.Usuario;
 import com.projetojoin.jikicosmeticos.jikicosmeticos.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,12 +19,6 @@ public class CadastroUsuarioController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
-
-//    @Autowired
-//    private JavaMailSender mailSender;
-
-//    @Value("${admin.email}")
-//    private String adminEmail;
 
     @PostMapping
     public ResponseEntity<?> cadastrarUsuario(@RequestBody Usuario usuario2) {
@@ -88,11 +80,7 @@ public class CadastroUsuarioController {
 
     private void enviarSolicitacaoExclusaoAdmin(Usuario usuario) {
         SimpleMailMessage message = new SimpleMailMessage();
-//        message.setTo(adminEmail);
         message.setSubject("Solicitação de exclusão de usuário (LGPD)");
         message.setText("Usuário solicitou exclusão de seus dados:\nEmail: " + usuario.getEmail() + "\nCPF: " + usuario.getCpf());
-        //mailSender.send(message);
     }
-
-   
 }

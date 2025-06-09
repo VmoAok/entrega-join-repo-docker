@@ -139,12 +139,4 @@ public class Usuario implements UserDetails {
         this.password = password;
         this.telefone = telefone;
     }
-    public Object getDataModificacao() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getDataModificacao'");
-    }
-    public Boolean getRole(Boolean role) {
-        this.role = role;
-        return role;
-    }
 }

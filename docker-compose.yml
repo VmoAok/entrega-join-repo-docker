@@ -13,6 +13,11 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
        - ecommerce-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   backend:
     build:
       context: ./backend-jikicosmeticos
@@ -22,8 +27,8 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - postgis_35_sample
-      - kafka 
+      - db
+      - kafka
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgis_35_sample
       SPRING_DATASOURCE_USERNAME: postgres
@@ -47,6 +52,11 @@ services:
       - zookeeper
     networks:
       - ecommerce-network
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics --bootstrap-server kafka:9092 --list"] #Requires kafka client tools
+      interval: 30s
+      timeout: 10s
+      retries: 3
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper

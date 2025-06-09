@@ -1,9 +1,14 @@
 package com.projetojoin.jikicosmeticos.jikicosmeticos.entity;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
-public class Usuario {
+public class Usuario implements UserDetails {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idUser;
     private String email;
@@ -73,9 +78,21 @@ public class Usuario {
     public void setEndereco(String endereco) {
         this.endereco = endereco;
     }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
     public String getPassword() {
         return password;
     }
+
+    @Override
+    public String getUsername() {
+        return "";
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }

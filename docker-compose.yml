@@ -1,0 +1,52 @@
+version: '3.8'
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    container_name: postgres_db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: postgis_35_sample
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+       - ecommerce-network
+  backend:
+    build:
+      context: ./backend-jikicosmeticos
+      dockerfile: Dockerfile
+    container_name: backend-jikicosmeticos
+    image: backend-image
+    ports:
+      - "8081:8081" 
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgis_35_sample
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 1234
+      API_SECURITY_TOKEN_SECRET: 1234567890abcdefjoin 
+      SERVER_PORT: 8081 
+    networks:
+       - ecommerce-network
+  frontend:
+    build:
+      context: ./node-js-cosmeticos-jiki
+      dockerfile: Dockerfile
+    container_name: ecommerce-frontend
+    image: frontend-image
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      API_URL: http://backend:8081 
+    networks:
+        - ecommerce-network
+networks:
+  ecommerce-network:
+    driver: bridge
+volumes:
+  postgres_data:

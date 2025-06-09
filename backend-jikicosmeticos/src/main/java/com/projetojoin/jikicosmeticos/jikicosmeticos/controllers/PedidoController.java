@@ -13,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/pedidos")
@@ -31,7 +30,6 @@ public class PedidoController {
     @Value("${admin.email}")
     private String adminEmail;
 
-    // Registrar novo pedido (vinculado ao usuário autenticado)
     @PostMapping
     @PreAuthorize("hasRole('CLI') or hasRole('FUNC')")
     public ResponseEntity<Pedido> createPedido(@RequestBody Pedido pedido, Authentication authentication) {
@@ -45,7 +43,6 @@ public class PedidoController {
         return ResponseEntity.ok(savedPedido);
     }
 
-    // Remover pedido (ADMIN pode remover qualquer, USER só o próprio)
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> deletePedido(@PathVariable Long idPedido, Authentication authentication) {
@@ -58,14 +55,12 @@ public class PedidoController {
         Usuario usuario = usuarioRepository.findByEmail(email).orElse(null);
         boolean isAdmin = authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 
-        // Verifica se é admin ou se o pedido pertence ao usuário autenticado
         if (isAdmin || (usuario != null && pedido.getIdUser() != null &&
                 (pedido.getIdUser().getEmail().equals(usuario.getEmail()) ||
                  pedido.getIdUser().getCpf().equals(usuario.getCpf())))) {
 
             pedidoRepository.delete(pedido);
 
-            // Notifica o admin via Kafka se não for admin removendo
             if (!isAdmin) {
                 enviarNotificacaoKafka(usuario, pedido);
             }
@@ -76,13 +71,11 @@ public class PedidoController {
         }
     }
 
-    // Envia notificação para o email do administrador via Kafka
     private void enviarNotificacaoKafka(Usuario usuario, Pedido pedido) {
-        String mensagem = "O usuário " + usuario.getEmail() + " (CPF: " + usuario.getCpf() + ") cancelou o pedido de ID: " + pedido.getId();
+        String mensagem = "O usuário " + usuario.getEmail() + " (CPF: " + usuario.getCpf() + ") cancelou o pedido de ID: " + pedido.getIdUser();
         kafkaTemplate.send("notificacao-admin", mensagem);
     }
 
-    // ADMIN: modificar status de pedidos - Atualizar tb_pedido para remvoer item e modificar status
     @PutMapping("/admin/pedidos/{id}/status")
     @PreAuthorize("authentication.authorities.?[authority.startsWith('UFUNC')].size() > 0")
     public ResponseEntity<?> modificarStatusPedido(@PathVariable Long idPedido, @RequestParam String status) {
@@ -96,14 +89,12 @@ public class PedidoController {
         return ResponseEntity.ok("Status do pedido atualizado.");
     }
 
-    // ADMIN: incluir novo produto no estoque (TB_ESTOQUE)  
     @PostMapping("/admin/produtos")
     @PreAuthorize("hasAuthority('FUNC')")
     public ResponseEntity<?> incluirProdutoEstoque(@RequestBody Object produto) {
         return ResponseEntity.ok("Produto incluído no estoque.");
     }
 
-    // USER: criar novo pedido
     @PostMapping("/me/pedidos")
     @PreAuthorize("hasAuthority('CLI')")
     public ResponseEntity<?> criarPedido(@RequestBody Pedido pedido, Authentication authentication) {
@@ -117,7 +108,6 @@ public class PedidoController {
         return ResponseEntity.ok("Pedido criado com sucesso.");
     }
 
-    // USER: cancelar pedido próprio
     @DeleteMapping("/me/pedidos/{id}")
     @PreAuthorize("hasAuthority('CLI')")
     public ResponseEntity<?> cancelarPedido(@PathVariable Long idPedido, Authentication authentication) {
@@ -134,7 +124,6 @@ public class PedidoController {
         return ResponseEntity.ok("Pedido cancelado com sucesso.");
     }
 
-    @SuppressWarnings("unlikely-arg-type")
     @GetMapping("/me/pedidos")
     @PreAuthorize("authentication.authorities.?[authority.startsWith('UCLI')].size() > 0")
     public ResponseEntity<List<Pedido>> listarMeusPedidos(Authentication authentication) {
@@ -143,8 +132,7 @@ public class PedidoController {
     if (usuarioLogado == null) {
         return ResponseEntity.status(401).build();
     }
-    // Supondo que o código UCLI está em usuarioLogado.getCodigoUcli()
-    // E que o campo de autoridade é igual ao código UCLI do usuário
+
     boolean autorizado = authentication.getAuthorities().stream()
         .anyMatch(a -> a.getAuthority().equals(usuarioLogado.getIdUser()));
     if (!autorizado) {
@@ -154,7 +142,6 @@ public class PedidoController {
     return ResponseEntity.ok(pedidos);
 }
 
-    // ADMIN: Listar todos os pedidos
     @GetMapping("/admin/pedidos")
     @PreAuthorize("authentication.authorities.?[authority.startsWith('UFUNC')].size() > 0")
     public ResponseEntity<List<Pedido>> listarTodosPedidos() {

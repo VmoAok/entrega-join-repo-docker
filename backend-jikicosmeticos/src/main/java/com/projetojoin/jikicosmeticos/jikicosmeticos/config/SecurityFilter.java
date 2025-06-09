@@ -7,6 +7,7 @@
  */
 package com.projetojoin.jikicosmeticos.jikicosmeticos.config;
 
+import com.projetojoin.jikicosmeticos.jikicosmeticos.services.UsuarioService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,7 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.projetojoin.jikicosmeticos.jikicosmeticos.services.UsuarioService;
 import org.springframework.lang.NonNull;
 import java.io.IOException;
 
@@ -25,7 +25,7 @@ import java.io.IOException;
 public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
-    private TokenService tokenService;
+    private TokenConfig tokenConfig;
 
     @Autowired
     private UsuarioService usuarioService;
@@ -34,7 +34,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
         String token = this.recoverToken(request);
         if(token != null){
-            String username = tokenService.validateToken(token);
+            String username = tokenConfig.validateToken(token);
             if(username != null) {
                 UserDetails usuario = usuarioService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());

@@ -1,11 +1,3 @@
-/*  tabela de estoque: tb_jiki_estoque_produtos
-    id_cosmetico
-    produto
-    tipo_produto
-    categoria_produto
-    descricao_produto
-    quantidade */
-
 package com.projetojoin.jikicosmeticos.jikicosmeticos.entity;
 import jakarta.persistence.*;
 

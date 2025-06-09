@@ -5,7 +5,6 @@ import com.projetojoin.jikicosmeticos.jikicosmeticos.entity.Usuario;
 import com.projetojoin.jikicosmeticos.jikicosmeticos.repository.PedidoRepository;
 import com.projetojoin.jikicosmeticos.jikicosmeticos.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -1,36 +1,49 @@
 package com.projetojoin.jikicosmeticos.jikicosmeticos.models;
 
-import jakarta.persistence.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-@Entity
-@Table(name = "tb_jiki_estoque_produtos")
-public class ProductTest {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+class ProductTest {
 
-    private String produto;
-    private String tipo_produto;
-    private String categoria_produto;
-    private String descricao_produto;
-    private String estoque;
+    @Test
+    void testSetAndGetId() {
+        Product product = new Product();
+        product.setId(10L);
+        assertEquals(10L, product.getId());
+    }
 
-    // Getters e Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    @Test
+    void testSetAndGetProduto() {
+        Product product = new Product();
+        product.setProduto("Shampoo");
+        assertEquals("Shampoo", product.getProduto());
+    }
 
-    public String getProduto() { return produto; }
-    public void setProduto(String produto) { this.produto = produto; }
+    @Test
+    void testSetAndGetTipoProduto() {
+        Product product = new Product();
+        product.setTipo_produto("Cabelo");
+        assertEquals("Cabelo", product.getTipo_produto());
+    }
 
-    public String getTipo_produto() { return tipo_produto; }
-    public void setTipo_produto(String tipo_produto) { this.tipo_produto = tipo_produto; }
+    @Test
+    void testSetAndGetCategoriaProduto() {
+        Product product = new Product();
+        product.setCategoria_produto("Hidratação");
+        assertEquals("Hidratação", product.getCategoria_produto());
+    }
 
-    public String getCategoria_produto() { return categoria_produto; }
-    public void setCategoria_produto(String categoria_produto) { this.categoria_produto = categoria_produto; }
+    @Test
+    void testSetAndGetDescricaoProduto() {
+        Product product = new Product();
+        product.setDescricao_produto("Shampoo para cabelos secos");
+        assertEquals("Shampoo para cabelos secos", product.getDescricao_produto());
+    }
 
-    public String getDescricao_produto() { return descricao_produto; }
-    public void setDescricao_produto(String descricao_produto) { this.descricao_produto = descricao_produto; }
-
-    public String getEstoque() { return estoque; }
-    public void setEstoque(String estoque) { this.estoque = estoque; }
+    @Test
+    void testSetAndGetEstoque() {
+        Product product = new Product();
+        product.setEstoque("15");
+        assertEquals("15", product.getEstoque());
+    }
 }
